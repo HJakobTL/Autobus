@@ -5,7 +5,6 @@ public class Autobus
     // Variable
     private String name;
     private double eigengewicht;
-    private int stelle;
     private int busSize;
     private Person[] persons;
 
@@ -13,15 +12,13 @@ public class Autobus
     public Autobus(){
         this.setName("n/A");
         this.setEigengewicht(1300); 
-        this.setBusSize(10);
-        this.setPersonenArray(persons);
+        this.setBusSize(2);
     }
 
     public Autobus(String name, double eigengewicht, int busSize){
         this.setName(name);
         this.setEigengewicht(eigengewicht);
         this.setBusSize(busSize);
-        this.setPersonenArray(persons);
     }
 
     // Die Getter
@@ -40,7 +37,7 @@ public class Autobus
     public Person[] getPerson(){
         return persons;
     }
-    
+
     // Die Setter
     public void setName(String name){
         if (name == null){
@@ -60,54 +57,54 @@ public class Autobus
         if (busSize < 1 || busSize > 100){
             throw new IllegalArgumentException("Bus darf nur zwischen 1 und 100 sein");
         }
+        if (this.busSize != busSize || this.persons == null){
+            this.persons = new Person[busSize];
+        }
         this.busSize = busSize;
     }
-    
-    public void setPersonenArray(Person[] persons){
-        this.persons = new Person[busSize];
-    }
-    
+
     public int stelleFinden(Person person){
         for (int i = 0; i < busSize; i++){
-            if (persons[i] == person){
-                stelle = i;
+            if (persons[i] != null && person.equals(persons[i])){
+                return i;
             }
         }
-        return stelle;
+        return -1;
     }
 
     // Einsteigen
     public Person einsteigen(Person person){
-        for (int i = 0; i < busSize; i++){
-            if (persons[stelleFinden(person)] == person){
+        if (stelleFinden(person) >= 0){
                 throw new IllegalArgumentException("Person schon im Bus");
             }
+        for (int i = 0; i < busSize; i++){
             if (null == persons[i]){
-                return persons[i] = person;
+                persons[i] = person;
+                return person;
             }
         }
-        return null;
+        throw new IllegalArgumentException("Bus ist voll");
     }
 
     // Aussteigen
     public Person aussteigen(Person person){
         for (int i = 0; i < busSize; i++){
-            if (person == persons[i]){
-                return persons[i] = null;
+            if (persons[i] != null && person.equals(persons[i])){
+                persons[i] = null;
+                return null;
             }
         }
-        return person;
+        throw new IllegalArgumentException("Person nicht im Bus");
     }
 
     // Person ist im Array
     public boolean isDrinnen(Person person){
-        boolean drinnen = false;
         for (int i = 0; i < busSize; i++){
-            if (person == persons[i]){
-                drinnen = true;
+            if (persons[i] != null && person.equals(persons[i])){
+                return true;
             }
         }
-        return drinnen;
+        return false;
     }
 
     // Anzahl der Personen im Array
