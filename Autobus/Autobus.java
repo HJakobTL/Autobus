@@ -9,31 +9,31 @@ public class Autobus
     // Variable
     private String name;
     private double eigengewicht;
-    
+
     private Person fahrer;
     private Person beifahrer;
     private Person rueckbank;
-    
+
     // Auto Objekte
     public Autobus(){
         this.setName("n/A");
         this.setEigengewicht(1300); 
     }
-    
+
     public Autobus(String name, double eigengewicht){
         this.setName(name);
         this.setEigengewicht(eigengewicht);
     }
-    
+
     // Die Getter
     public String getName(){
         return name;
     }
-    
+
     public double getEigengewicht(){
         return eigengewicht;
     }
-    
+
     // Die Setter
     public void setName(String name){
         if (name == null){
@@ -41,14 +41,14 @@ public class Autobus
         }
         this.name = name;
     }
-    
+
     public void setEigengewicht(double eigengewicht){
         if (eigengewicht < 600 || eigengewicht > 3000){
             throw new IllegalArgumentException("Eigengewicht nur zwischen 600 und 3000 möglich");
         }
         this.eigengewicht = eigengewicht;
     }
-    
+
     // Hilffunktion um zu schauen ob die Person im Auto ist oder nicht
     public boolean personImAuto(Person person){
         boolean anwesend = true;
@@ -63,7 +63,7 @@ public class Autobus
         }
         else return false;
     }
-    
+
     // Einsteige Funktion
     public void einsteigen(Person person){
         if (person == null){
@@ -86,21 +86,23 @@ public class Autobus
         }
         else throw new IllegalStateException("Auto ist voll");
     }
-    
+
     // Aussteiger und Aussteige Funktion per Person
     private void aussteigenFahrer(){
         System.out.println(fahrer.getName() + " steigt aus");
         fahrer = null;
     }
+
     private void aussteigenBeifahrer(){
         System.out.println(beifahrer.getName() + " steigt aus");
         beifahrer = null;
     }
+
     private void aussteigenRuckbank(){
         System.out.println(rueckbank.getName() + " steigt aus");
         rueckbank = null;
     }
-    
+
     public void aussteigen(Person person){
         if (person == null){
             throw new IllegalArgumentException("Person kann nicht 'null' sein");
@@ -119,7 +121,7 @@ public class Autobus
         }
         else throw new IllegalArgumentException("Kein Person im Auto");
     }
-    
+
     // Austeige Funktion per Name
     public void aussteigen(String name){
         if (name == null){
@@ -136,7 +138,7 @@ public class Autobus
         }
         else throw new IllegalArgumentException("Person mit diesem Namen (" + name + ") ist nicht im Auto");
     }
-    
+
     // Gesamt Gewicht des Autos ausrechnen
     public double gesamtGewicht(){
         double gesamtGewicht = getEigengewicht(); 
@@ -154,20 +156,19 @@ public class Autobus
         }
         return gesamtGewicht;
     }
-    
-    
+
     public void autoAushalten(){
         if (gesamtGewicht() > 3500){
             throw new IllegalArgumentException("Auto hält das nicht aus");
         }
         System.out.println("Auto hält das Gewicht aus");
     }
-    
+
     // Print Auto Infos
     public void printAuto(){
         System.out.println("Auto: " + name + ", Eigengewicht: " + eigengewicht);
         System.out.println("--------------------------------------------------------");
-        
+
         System.out.print("Fahrer: ");
         if (this.fahrer == null){
             System.out.println("--frei--");
