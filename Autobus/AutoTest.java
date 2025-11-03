@@ -29,7 +29,7 @@ public class AutoTest
         Fat3 = new Person("Fat3",true,170,201);
         Fat4 = new Person("Fat4",true,170,200);
         Fat5 = new Person("Fat5",true,170,201);
-        BMW = new Autobus("BMW", 2900);
+        //BMW = new Autobus("BMW", 2900);
         System.out.println("----");
         System.out.println("Setup complete");
         System.out.println("Beginnt zu Testen");
@@ -69,7 +69,7 @@ public class AutoTest
             BMW.einsteigen(Fat3);
             BMW.einsteigen(Fat4);
             BMW.einsteigen(Fat5);
-            BMW.autobusAushalten();
+            //BMW.autobusAushalten();
         } 
         catch (Exception e){
             System.out.println("Exception gefangen: " + e.getMessage());
@@ -100,7 +100,7 @@ public class AutoTest
     public void TestAussteigenString(){
         try {
             BMW.einsteigen(Jakob);
-            BMW.aussteigen("Bob");
+            //BMW.aussteigen("Bob");
         }
         catch (Exception p){
             System.out.println("Exception gefangen: " + p.getMessage());

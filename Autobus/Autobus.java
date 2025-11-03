@@ -1,28 +1,27 @@
-/**
- * Write a description of class Auto here.
- *
- * @author (Jakob Cezawa)
- * @version (29.09.2025)
- */
+// Autoren: Biegel Alexander und Cezawa Jakob
+//
 public class Autobus
 {
     // Variable
     private String name;
     private double eigengewicht;
-
-    private Person fahrer;
-    private Person beifahrer;
-    private Person rueckbank;
+    private int stelle;
+    private int busSize;
+    private Person[] persons;
 
     // Auto Objekte
     public Autobus(){
         this.setName("n/A");
         this.setEigengewicht(1300); 
+        this.setBusSize(10);
+        this.setPersonenArray(persons);
     }
 
-    public Autobus(String name, double eigengewicht){
+    public Autobus(String name, double eigengewicht, int busSize){
         this.setName(name);
         this.setEigengewicht(eigengewicht);
+        this.setBusSize(busSize);
+        this.setPersonenArray(persons);
     }
 
     // Die Getter
@@ -34,6 +33,14 @@ public class Autobus
         return eigengewicht;
     }
 
+    public int getBusSize(){
+        return busSize;
+    }
+
+    public Person[] getPerson(){
+        return persons;
+    }
+    
     // Die Setter
     public void setName(String name){
         if (name == null){
@@ -49,146 +56,79 @@ public class Autobus
         this.eigengewicht = eigengewicht;
     }
 
-    // Hilffunktion um zu schauen ob die Person im Auto ist oder nicht
-    public boolean personImAuto(Person person){
-        boolean anwesend = true;
-        if (person == fahrer){
-            return true;
+    public void setBusSize(int busSize){
+        if (busSize < 1 || busSize > 100){
+            throw new IllegalArgumentException("Bus darf nur zwischen 1 und 100 sein");
         }
-        else if (person == beifahrer){
-            return true;
+        this.busSize = busSize;
+    }
+    
+    public void setPersonenArray(Person[] persons){
+        this.persons = new Person[busSize];
+    }
+    
+    public int stelleFinden(Person person){
+        for (int i = 0; i < busSize; i++){
+            if (persons[i] == person){
+                stelle = i;
+            }
         }
-        else if (person == rueckbank){
-            return true;
-        }
-        else return false;
+        return stelle;
     }
 
-    // Einsteige Funktion
-    public void einsteigen(Person person){
-        if (person == null){
-            throw new IllegalArgumentException("Person kann nicht 'null' sein");
+    // Einsteigen
+    public Person einsteigen(Person person){
+        for (int i = 0; i < busSize; i++){
+            if (persons[stelleFinden(person)] == person){
+                throw new IllegalArgumentException("Person schon im Bus");
+            }
+            if (null == persons[i]){
+                return persons[i] = person;
+            }
         }
-        if (personImAuto(person) == true){
-            throw new IllegalArgumentException("Person im Auto");
-        }
-        if (this.fahrer == null){
-            this.fahrer = person;
-            System.out.println(fahrer.getName() + " ist der Fahrer");
-        }
-        else if (this.beifahrer == null){
-            this.beifahrer = person;
-            System.out.println(beifahrer.getName() + " ist der Beifahrer");
-        }
-        else if (this.rueckbank == null){
-            this.rueckbank = person;
-            System.out.println(rueckbank.getName() + " ist auf der Rückbank");
-        }
-        else throw new IllegalStateException("Auto ist voll");
+        return null;
     }
 
-    // Aussteiger und Aussteige Funktion per Person
-    private void aussteigenFahrer(){
-        System.out.println(fahrer.getName() + " steigt aus");
-        fahrer = null;
+    // Aussteigen
+    public Person aussteigen(Person person){
+        for (int i = 0; i < busSize; i++){
+            if (person == persons[i]){
+                return persons[i] = null;
+            }
+        }
+        return person;
     }
 
-    private void aussteigenBeifahrer(){
-        System.out.println(beifahrer.getName() + " steigt aus");
-        beifahrer = null;
+    // Person ist im Array
+    public boolean isDrinnen(Person person){
+        boolean drinnen = false;
+        for (int i = 0; i < busSize; i++){
+            if (person == persons[i]){
+                drinnen = true;
+            }
+        }
+        return drinnen;
     }
 
-    private void aussteigenRuckbank(){
-        System.out.println(rueckbank.getName() + " steigt aus");
-        rueckbank = null;
+    // Anzahl der Personen im Array
+    public int anzahlPassagiere(){
+        int anzahl = 0;
+        for (int i = 0; i < busSize; i++){
+            if (persons[i] != null){
+                anzahl++;
+            }
+        }
+        return anzahl;
     }
 
-    public void aussteigen(Person person){
-        if (person == null){
-            throw new IllegalArgumentException("Person kann nicht 'null' sein");
-        }
-        if (personImAuto(person) == false){
-            throw new IllegalArgumentException("Person ist nicht im Auto");
-        }
-        if (this.fahrer == person){
-            aussteigenFahrer();
-        }
-        else if (this.beifahrer == person){
-            aussteigenBeifahrer();
-        }
-        else if (this.rueckbank == person){
-            aussteigenRuckbank();
-        }
-        else throw new IllegalArgumentException("Kein Person im Auto");
-    }
-
-    // Austeige Funktion per Name
-    public void aussteigen(String name){
-        if (name == null){
-            throw new IllegalArgumentException("Name darf nicht 'null' sein");
-        }
-        if (this.fahrer != null && name.equals(fahrer.getName())){
-            aussteigenFahrer();
-        }
-        else if (this.beifahrer != null && name.equals(beifahrer.getName())){
-            aussteigenBeifahrer();
-        }
-        else if (this.rueckbank != null && name.equals(rueckbank.getName())){
-            aussteigenRuckbank();
-        }
-        else throw new IllegalArgumentException("Person mit diesem Namen (" + name + ") ist nicht im Auto");
-    }
-
-    // Gesamt Gewicht des Autos ausrechnen
-    public double gesamtGewicht(){
+    //Gesamt Gewicht des Buses ausrechnen (Bus + Personen im Bus)
+    public double nutzlast(){
         double gesamtGewicht = getEigengewicht(); 
-        if (this.fahrer != null){
-            gesamtGewicht += this.fahrer.getKg();
-            System.out.println(gesamtGewicht);
-        }
-        if (this.beifahrer != null){
-            gesamtGewicht += this.beifahrer.getKg();
-            System.out.println(gesamtGewicht);
-        }
-        if (this.rueckbank != null){
-            gesamtGewicht += this.rueckbank.getKg();
-            System.out.println(gesamtGewicht);
+        for (Person person: persons){
+            if (person != null){
+                gesamtGewicht += person.getKg();
+            }
         }
         return gesamtGewicht;
-    }
-
-    public void autoAushalten(){
-        if (gesamtGewicht() > 3500){
-            throw new IllegalArgumentException("Auto hält das nicht aus");
-        }
-        System.out.println("Auto hält das Gewicht aus");
-    }
-
-    // Print Auto Infos
-    public void printAuto(){
-        System.out.println("Auto: " + name + ", Eigengewicht: " + eigengewicht);
-        System.out.println("--------------------------------------------------------");
-
-        System.out.print("Fahrer: ");
-        if (this.fahrer == null){
-            System.out.println("--frei--");
-        }
-        else this.fahrer.printPerson();
-        System.out.println("---------");
-        System.out.println("Beifahrer: ");
-        if (this.beifahrer == null){
-            System.out.println("--frei--");
-        }
-        else this.beifahrer.printPerson();
-        System.out.println("---------");
-        System.out.println("Ruckbank: ");
-        if (this.rueckbank == null){
-            System.out.println("--frei--");
-        }
-        else this.rueckbank.printPerson();
-        System.out.println("---------");
-        System.out.println("Das Gesamtgewicht: " + gesamtGewicht());
-        autoAushalten();
-        System.out.println("--------------------------------------------------------");
     }
 }
